@@ -1,5 +1,5 @@
-from data_preparation_train import train_graph_data_preparation
-from data_preparation_test import test_graph_data_preparation
+from data_preparators.data_preparation_train import train_graph_data_preparation
+from data_preparators.data_preparation_test import test_graph_data_preparation
 from hetero_gat_model import Model
 from train import train
 from train_graph_sage import train_sage
@@ -19,9 +19,11 @@ def main(
 ) -> None:
     model_name = "GraphSage"
     # model_name = "GAT"
-    train_loader, graph_data, metadata = train_graph_data_preparation(
+    train_loader, graph_data = train_graph_data_preparation(
         t, ont, batch_size
     )
+    metadata = graph_data.metadata()
+    
     test_loader = test_graph_data_preparation(t, ont, batch_size)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
