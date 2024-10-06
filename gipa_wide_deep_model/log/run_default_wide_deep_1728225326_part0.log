@@ -1,0 +1,342 @@
+Namespace(model='gipa_deep_wide', root='./', cpu=False, gpu=0, seed=0, n_runs=10, n_epochs=1500, eval_times=1, advanced_optimizer=True, train_partition_num=1, eval_partition_num=1, no_attn_dst=False, n_heads=10, norm='none', disable_fea_trans_norm=False, edge_att_act='none', edge_agg_mode='single_softmax', lr=0.01, n_layers=5, n_hidden=32, dropout=0.4, input_drop=0.4, edge_drop=0.1, eval_every=5, log_every=5, save_pred=False, log_file_name='run_default_wide_deep', first_hidden=128, edge_emb_size=8, wd=0, use_sparse_fea=True, sparse_encoder='log', input_norm=False, first_layer_norm=False, first_layer_act='relu', feature_drop=0.0, last_layer_drop=-1.0, n_deep_layers=3, n_deep_hidden=128, deep_drop_out=0.4, deep_input_drop=0.1)
+Running for seeds 0Number of node feature: 8
+Number of edge feature: 8
+Number of params: 4010110
+Run: 1/10, Epoch: 1/1500, this epoch time: 17.19s Train loss/score: 0.7521/0.0000
+Run: 1/10, Epoch: 2/1500, this epoch time: 14.48s Train loss/score: 0.2315/0.0000
+Run: 1/10, Epoch: 3/1500, this epoch time: 14.68s Train loss/score: 0.0886/0.0000
+Run: 1/10, Epoch: 4/1500, this epoch time: 14.19s Train loss/score: 0.0591/0.0000
+Run: 1/10, Epoch: 5/1500, this epoch time: 13.88s Train loss/score: 0.0545/0.0000
+Run: 1/10, Epoch: 5/1500, Average Train epoch time: 14.88s, Average Eval epoch time: 15.72s
+Loss: 0.0545 Train/Val/Test loss: 0.0609/0.0609/0.0602
+Train/Val/Test: 0.0000/0.0000/0.0000
+Best val/Final test score/Best Step: 0.0000/0.0000/0
+Run: 1/10, Epoch: 6/1500, this epoch time: 14.62s Train loss/score: 0.0554/0.0001
+Run: 1/10, Epoch: 7/1500, this epoch time: 14.10s Train loss/score: 0.0574/0.0000
+Run: 1/10, Epoch: 8/1500, this epoch time: 14.09s Train loss/score: 0.0588/0.0000
+Run: 1/10, Epoch: 9/1500, this epoch time: 13.81s Train loss/score: 0.0602/0.0000
+Run: 1/10, Epoch: 10/1500, this epoch time: 13.59s Train loss/score: 0.0609/0.0000
+Run: 1/10, Epoch: 10/1500, Average Train epoch time: 14.46s, Average Eval epoch time: 15.66s
+Loss: 0.0609 Train/Val/Test loss: 0.0657/0.0656/0.0650
+Train/Val/Test: 0.0002/0.0000/0.0000
+Best val/Final test score/Best Step: 0.0000/0.0000/0
+Run: 1/10, Epoch: 11/1500, this epoch time: 13.53s Train loss/score: 0.0609/0.0000
+Run: 1/10, Epoch: 12/1500, this epoch time: 14.00s Train loss/score: 0.0606/0.0000
+Run: 1/10, Epoch: 13/1500, this epoch time: 13.35s Train loss/score: 0.0595/0.0003
+Run: 1/10, Epoch: 14/1500, this epoch time: 13.32s Train loss/score: 0.0576/0.0016
+Run: 1/10, Epoch: 15/1500, this epoch time: 13.47s Train loss/score: 0.0564/0.0016
+Run: 1/10, Epoch: 15/1500, Average Train epoch time: 14.15s, Average Eval epoch time: 15.64s
+Loss: 0.0564 Train/Val/Test loss: 0.0515/0.0515/0.0514
+Train/Val/Test: 0.0018/0.0012/0.0018
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 16/1500, this epoch time: 14.26s Train loss/score: 0.0548/0.0010
+Run: 1/10, Epoch: 17/1500, this epoch time: 14.66s Train loss/score: 0.0528/0.0006
+Run: 1/10, Epoch: 18/1500, this epoch time: 14.58s Train loss/score: 0.0510/0.0001
+Run: 1/10, Epoch: 19/1500, this epoch time: 13.78s Train loss/score: 0.0501/0.0002
+Run: 1/10, Epoch: 20/1500, this epoch time: 13.72s Train loss/score: 0.0491/0.0001
+Run: 1/10, Epoch: 20/1500, Average Train epoch time: 14.16s, Average Eval epoch time: 15.59s
+Loss: 0.0491 Train/Val/Test loss: 0.0481/0.0483/0.0480
+Train/Val/Test: 0.0000/0.0000/0.0000
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 21/1500, this epoch time: 14.64s Train loss/score: 0.0487/0.0003
+Run: 1/10, Epoch: 22/1500, this epoch time: 14.01s Train loss/score: 0.0480/0.0001
+Run: 1/10, Epoch: 23/1500, this epoch time: 13.96s Train loss/score: 0.0475/0.0002
+Run: 1/10, Epoch: 24/1500, this epoch time: 13.86s Train loss/score: 0.0471/0.0002
+Run: 1/10, Epoch: 25/1500, this epoch time: 14.17s Train loss/score: 0.0470/0.0001
+Run: 1/10, Epoch: 25/1500, Average Train epoch time: 14.16s, Average Eval epoch time: 15.56s
+Loss: 0.0470 Train/Val/Test loss: 0.0494/0.0496/0.0492
+Train/Val/Test: 0.0000/0.0000/0.0000
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 26/1500, this epoch time: 13.52s Train loss/score: 0.0466/0.0000
+Run: 1/10, Epoch: 27/1500, this epoch time: 13.62s Train loss/score: 0.0466/0.0000
+Run: 1/10, Epoch: 28/1500, this epoch time: 13.44s Train loss/score: 0.0460/0.0001
+Run: 1/10, Epoch: 29/1500, this epoch time: 13.63s Train loss/score: 0.0459/0.0002
+Run: 1/10, Epoch: 30/1500, this epoch time: 13.62s Train loss/score: 0.0458/0.0001
+Run: 1/10, Epoch: 30/1500, Average Train epoch time: 14.06s, Average Eval epoch time: 15.60s
+Loss: 0.0458 Train/Val/Test loss: 0.0563/0.0565/0.0560
+Train/Val/Test: 0.0000/0.0000/0.0000
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 31/1500, this epoch time: 15.18s Train loss/score: 0.0458/0.0000
+Run: 1/10, Epoch: 32/1500, this epoch time: 15.05s Train loss/score: 0.0456/0.0004
+Run: 1/10, Epoch: 33/1500, this epoch time: 14.26s Train loss/score: 0.0454/0.0001
+Run: 1/10, Epoch: 34/1500, this epoch time: 14.22s Train loss/score: 0.0453/0.0007
+Run: 1/10, Epoch: 35/1500, this epoch time: 13.95s Train loss/score: 0.0452/0.0011
+Run: 1/10, Epoch: 35/1500, Average Train epoch time: 14.13s, Average Eval epoch time: 15.62s
+Loss: 0.0452 Train/Val/Test loss: 0.0538/0.0540/0.0535
+Train/Val/Test: 0.0000/0.0000/0.0000
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 36/1500, this epoch time: 14.73s Train loss/score: 0.0450/0.0016
+Run: 1/10, Epoch: 37/1500, this epoch time: 14.44s Train loss/score: 0.0448/0.0020
+Run: 1/10, Epoch: 38/1500, this epoch time: 14.03s Train loss/score: 0.0447/0.0030
+Run: 1/10, Epoch: 39/1500, this epoch time: 14.04s Train loss/score: 0.0446/0.0032
+Run: 1/10, Epoch: 40/1500, this epoch time: 13.94s Train loss/score: 0.0445/0.0021
+Run: 1/10, Epoch: 40/1500, Average Train epoch time: 14.14s, Average Eval epoch time: 15.63s
+Loss: 0.0445 Train/Val/Test loss: 0.0482/0.0484/0.0479
+Train/Val/Test: 0.0000/0.0000/0.0000
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 41/1500, this epoch time: 13.76s Train loss/score: 0.0444/0.0017
+Run: 1/10, Epoch: 42/1500, this epoch time: 13.66s Train loss/score: 0.0444/0.0025
+Run: 1/10, Epoch: 43/1500, this epoch time: 13.73s Train loss/score: 0.0441/0.0026
+Run: 1/10, Epoch: 44/1500, this epoch time: 13.65s Train loss/score: 0.0440/0.0020
+Run: 1/10, Epoch: 45/1500, this epoch time: 13.75s Train loss/score: 0.0441/0.0017
+Run: 1/10, Epoch: 45/1500, Average Train epoch time: 14.09s, Average Eval epoch time: 15.69s
+Loss: 0.0441 Train/Val/Test loss: 0.0462/0.0465/0.0459
+Train/Val/Test: 0.0000/0.0000/0.0000
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 46/1500, this epoch time: 14.58s Train loss/score: 0.0440/0.0015
+Run: 1/10, Epoch: 47/1500, this epoch time: 14.06s Train loss/score: 0.0438/0.0019
+Run: 1/10, Epoch: 48/1500, this epoch time: 14.41s Train loss/score: 0.0437/0.0013
+Run: 1/10, Epoch: 49/1500, this epoch time: 14.47s Train loss/score: 0.0439/0.0013
+Run: 1/10, Epoch: 50/1500, this epoch time: 14.36s Train loss/score: 0.0436/0.0017
+Run: 1/10, Epoch: 50/1500, Average Train epoch time: 14.12s, Average Eval epoch time: 15.77s
+Loss: 0.0436 Train/Val/Test loss: 0.0450/0.0452/0.0447
+Train/Val/Test: 0.0001/0.0000/0.0000
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 51/1500, this epoch time: 14.14s Train loss/score: 0.0436/0.0019
+Run: 1/10, Epoch: 52/1500, this epoch time: 14.12s Train loss/score: 0.0435/0.0021
+Run: 1/10, Epoch: 53/1500, this epoch time: 13.97s Train loss/score: 0.0435/0.0016
+Run: 1/10, Epoch: 54/1500, this epoch time: 13.67s Train loss/score: 0.0432/0.0010
+Run: 1/10, Epoch: 55/1500, this epoch time: 13.98s Train loss/score: 0.0433/0.0017
+Run: 1/10, Epoch: 55/1500, Average Train epoch time: 14.11s, Average Eval epoch time: 15.75s
+Loss: 0.0433 Train/Val/Test loss: 0.0452/0.0454/0.0448
+Train/Val/Test: 0.0000/0.0000/0.0000
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 56/1500, this epoch time: 13.92s Train loss/score: 0.0431/0.0012
+Run: 1/10, Epoch: 57/1500, this epoch time: 13.98s Train loss/score: 0.0431/0.0008
+Run: 1/10, Epoch: 58/1500, this epoch time: 14.20s Train loss/score: 0.0432/0.0013
+Run: 1/10, Epoch: 59/1500, this epoch time: 14.90s Train loss/score: 0.0429/0.0022
+Run: 1/10, Epoch: 60/1500, this epoch time: 14.91s Train loss/score: 0.0427/0.0019
+Run: 1/10, Epoch: 60/1500, Average Train epoch time: 14.13s, Average Eval epoch time: 15.81s
+Loss: 0.0427 Train/Val/Test loss: 0.0444/0.0445/0.0440
+Train/Val/Test: 0.0000/0.0000/0.0000
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 61/1500, this epoch time: 14.20s Train loss/score: 0.0427/0.0019
+Run: 1/10, Epoch: 62/1500, this epoch time: 14.50s Train loss/score: 0.0427/0.0026
+Run: 1/10, Epoch: 63/1500, this epoch time: 14.61s Train loss/score: 0.0428/0.0016
+Run: 1/10, Epoch: 64/1500, this epoch time: 14.62s Train loss/score: 0.0425/0.0016
+Run: 1/10, Epoch: 65/1500, this epoch time: 14.44s Train loss/score: 0.0425/0.0023
+Run: 1/10, Epoch: 65/1500, Average Train epoch time: 14.16s, Average Eval epoch time: 15.85s
+Loss: 0.0425 Train/Val/Test loss: 0.0437/0.0438/0.0434
+Train/Val/Test: 0.0004/0.0000/0.0000
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 66/1500, this epoch time: 13.95s Train loss/score: 0.0424/0.0019
+Run: 1/10, Epoch: 67/1500, this epoch time: 14.38s Train loss/score: 0.0423/0.0013
+Run: 1/10, Epoch: 68/1500, this epoch time: 14.52s Train loss/score: 0.0423/0.0017
+Run: 1/10, Epoch: 69/1500, this epoch time: 15.29s Train loss/score: 0.0421/0.0016
+Run: 1/10, Epoch: 70/1500, this epoch time: 14.58s Train loss/score: 0.0423/0.0020
+Run: 1/10, Epoch: 70/1500, Average Train epoch time: 14.18s, Average Eval epoch time: 15.84s
+Loss: 0.0423 Train/Val/Test loss: 0.0433/0.0434/0.0430
+Train/Val/Test: 0.0005/0.0000/0.0000
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 71/1500, this epoch time: 14.74s Train loss/score: 0.0421/0.0018
+Run: 1/10, Epoch: 72/1500, this epoch time: 14.35s Train loss/score: 0.0421/0.0020
+Run: 1/10, Epoch: 73/1500, this epoch time: 13.92s Train loss/score: 0.0420/0.0013
+Run: 1/10, Epoch: 74/1500, this epoch time: 13.80s Train loss/score: 0.0419/0.0014
+Run: 1/10, Epoch: 75/1500, this epoch time: 13.79s Train loss/score: 0.0419/0.0021
+Run: 1/10, Epoch: 75/1500, Average Train epoch time: 14.18s, Average Eval epoch time: 15.82s
+Loss: 0.0419 Train/Val/Test loss: 0.0428/0.0429/0.0426
+Train/Val/Test: 0.0007/0.0012/0.0006
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 76/1500, this epoch time: 13.96s Train loss/score: 0.0420/0.0013
+Run: 1/10, Epoch: 77/1500, this epoch time: 14.16s Train loss/score: 0.0418/0.0014
+Run: 1/10, Epoch: 78/1500, this epoch time: 13.94s Train loss/score: 0.0418/0.0014
+Run: 1/10, Epoch: 79/1500, this epoch time: 14.13s Train loss/score: 0.0418/0.0019
+Run: 1/10, Epoch: 80/1500, this epoch time: 14.47s Train loss/score: 0.0417/0.0014
+Run: 1/10, Epoch: 80/1500, Average Train epoch time: 14.18s, Average Eval epoch time: 15.88s
+Loss: 0.0417 Train/Val/Test loss: 0.0429/0.0431/0.0427
+Train/Val/Test: 0.0007/0.0006/0.0006
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 81/1500, this epoch time: 14.16s Train loss/score: 0.0416/0.0007
+Run: 1/10, Epoch: 82/1500, this epoch time: 14.17s Train loss/score: 0.0416/0.0019
+Run: 1/10, Epoch: 83/1500, this epoch time: 13.87s Train loss/score: 0.0415/0.0022
+Run: 1/10, Epoch: 84/1500, this epoch time: 13.73s Train loss/score: 0.0415/0.0019
+Run: 1/10, Epoch: 85/1500, this epoch time: 13.85s Train loss/score: 0.0415/0.0025
+Run: 1/10, Epoch: 85/1500, Average Train epoch time: 14.16s, Average Eval epoch time: 15.88s
+Loss: 0.0415 Train/Val/Test loss: 0.0429/0.0433/0.0428
+Train/Val/Test: 0.0004/0.0000/0.0000
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 86/1500, this epoch time: 14.70s Train loss/score: 0.0414/0.0025
+Run: 1/10, Epoch: 87/1500, this epoch time: 13.96s Train loss/score: 0.0414/0.0030
+Run: 1/10, Epoch: 88/1500, this epoch time: 13.84s Train loss/score: 0.0413/0.0022
+Run: 1/10, Epoch: 89/1500, this epoch time: 14.18s Train loss/score: 0.0413/0.0031
+Run: 1/10, Epoch: 90/1500, this epoch time: 14.26s Train loss/score: 0.0412/0.0022
+Run: 1/10, Epoch: 90/1500, Average Train epoch time: 14.17s, Average Eval epoch time: 15.87s
+Loss: 0.0412 Train/Val/Test loss: 0.0423/0.0428/0.0423
+Train/Val/Test: 0.0005/0.0000/0.0006
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 91/1500, this epoch time: 14.22s Train loss/score: 0.0412/0.0025
+Run: 1/10, Epoch: 92/1500, this epoch time: 13.88s Train loss/score: 0.0411/0.0020
+Run: 1/10, Epoch: 93/1500, this epoch time: 14.69s Train loss/score: 0.0411/0.0023
+Run: 1/10, Epoch: 94/1500, this epoch time: 14.80s Train loss/score: 0.0410/0.0025
+Run: 1/10, Epoch: 95/1500, this epoch time: 14.69s Train loss/score: 0.0410/0.0029
+Run: 1/10, Epoch: 95/1500, Average Train epoch time: 14.18s, Average Eval epoch time: 15.89s
+Loss: 0.0410 Train/Val/Test loss: 0.0421/0.0427/0.0422
+Train/Val/Test: 0.0007/0.0006/0.0006
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 96/1500, this epoch time: 14.26s Train loss/score: 0.0409/0.0032
+Run: 1/10, Epoch: 97/1500, this epoch time: 14.59s Train loss/score: 0.0409/0.0035
+Run: 1/10, Epoch: 98/1500, this epoch time: 14.38s Train loss/score: 0.0408/0.0038
+Run: 1/10, Epoch: 99/1500, this epoch time: 14.26s Train loss/score: 0.0409/0.0034
+Run: 1/10, Epoch: 100/1500, this epoch time: 13.78s Train loss/score: 0.0407/0.0030
+Run: 1/10, Epoch: 100/1500, Average Train epoch time: 14.18s, Average Eval epoch time: 15.88s
+Loss: 0.0407 Train/Val/Test loss: 0.0417/0.0422/0.0417
+Train/Val/Test: 0.0007/0.0006/0.0012
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 101/1500, this epoch time: 13.75s Train loss/score: 0.0407/0.0030
+Run: 1/10, Epoch: 102/1500, this epoch time: 13.83s Train loss/score: 0.0406/0.0033
+Run: 1/10, Epoch: 103/1500, this epoch time: 14.18s Train loss/score: 0.0406/0.0025
+Run: 1/10, Epoch: 104/1500, this epoch time: 13.87s Train loss/score: 0.0407/0.0022
+Run: 1/10, Epoch: 105/1500, this epoch time: 14.13s Train loss/score: 0.0406/0.0024
+Run: 1/10, Epoch: 105/1500, Average Train epoch time: 14.17s, Average Eval epoch time: 15.88s
+Loss: 0.0406 Train/Val/Test loss: 0.0414/0.0419/0.0415
+Train/Val/Test: 0.0008/0.0012/0.0024
+Best val/Final test score/Best Step: 0.0012/0.0018/15
+Run: 1/10, Epoch: 106/1500, this epoch time: 15.13s Train loss/score: 0.0405/0.0036
+Run: 1/10, Epoch: 107/1500, this epoch time: 14.47s Train loss/score: 0.0404/0.0024
+Run: 1/10, Epoch: 108/1500, this epoch time: 14.22s Train loss/score: 0.0404/0.0036
+Run: 1/10, Epoch: 109/1500, this epoch time: 13.79s Train loss/score: 0.0404/0.0034
+Run: 1/10, Epoch: 110/1500, this epoch time: 13.67s Train loss/score: 0.0403/0.0053
+Run: 1/10, Epoch: 110/1500, Average Train epoch time: 14.18s, Average Eval epoch time: 15.86s
+Loss: 0.0403 Train/Val/Test loss: 0.0411/0.0416/0.0412
+Train/Val/Test: 0.0009/0.0018/0.0018
+Best val/Final test score/Best Step: 0.0018/0.0018/110
+Run: 1/10, Epoch: 111/1500, this epoch time: 14.59s Train loss/score: 0.0402/0.0045
+Run: 1/10, Epoch: 112/1500, this epoch time: 14.30s Train loss/score: 0.0402/0.0046
+Run: 1/10, Epoch: 113/1500, this epoch time: 13.97s Train loss/score: 0.0403/0.0043
+Run: 1/10, Epoch: 114/1500, this epoch time: 13.66s Train loss/score: 0.0401/0.0039
+Run: 1/10, Epoch: 115/1500, this epoch time: 13.73s Train loss/score: 0.0400/0.0030
+Run: 1/10, Epoch: 115/1500, Average Train epoch time: 14.17s, Average Eval epoch time: 15.84s
+Loss: 0.0400 Train/Val/Test loss: 0.0407/0.0413/0.0410
+Train/Val/Test: 0.0014/0.0018/0.0024
+Best val/Final test score/Best Step: 0.0018/0.0018/110
+Run: 1/10, Epoch: 116/1500, this epoch time: 13.60s Train loss/score: 0.0400/0.0032
+Run: 1/10, Epoch: 117/1500, this epoch time: 13.79s Train loss/score: 0.0399/0.0032
+Run: 1/10, Epoch: 118/1500, this epoch time: 13.40s Train loss/score: 0.0399/0.0032
+Run: 1/10, Epoch: 119/1500, this epoch time: 13.29s Train loss/score: 0.0398/0.0035
+Run: 1/10, Epoch: 120/1500, this epoch time: 13.43s Train loss/score: 0.0397/0.0037
+Run: 1/10, Epoch: 120/1500, Average Train epoch time: 14.14s, Average Eval epoch time: 15.80s
+Loss: 0.0397 Train/Val/Test loss: 0.0402/0.0408/0.0404
+Train/Val/Test: 0.0016/0.0006/0.0024
+Best val/Final test score/Best Step: 0.0018/0.0018/110
+Run: 1/10, Epoch: 121/1500, this epoch time: 13.38s Train loss/score: 0.0397/0.0033
+Run: 1/10, Epoch: 122/1500, this epoch time: 13.41s Train loss/score: 0.0397/0.0025
+Run: 1/10, Epoch: 123/1500, this epoch time: 13.36s Train loss/score: 0.0397/0.0030
+Run: 1/10, Epoch: 124/1500, this epoch time: 13.39s Train loss/score: 0.0396/0.0032
+Run: 1/10, Epoch: 125/1500, this epoch time: 13.25s Train loss/score: 0.0395/0.0030
+Run: 1/10, Epoch: 125/1500, Average Train epoch time: 14.11s, Average Eval epoch time: 15.77s
+Loss: 0.0395 Train/Val/Test loss: 0.0395/0.0401/0.0398
+Train/Val/Test: 0.0011/0.0000/0.0006
+Best val/Final test score/Best Step: 0.0018/0.0018/110
+Run: 1/10, Epoch: 126/1500, this epoch time: 13.36s Train loss/score: 0.0395/0.0036
+Run: 1/10, Epoch: 127/1500, this epoch time: 13.32s Train loss/score: 0.0396/0.0041
+Run: 1/10, Epoch: 128/1500, this epoch time: 13.23s Train loss/score: 0.0395/0.0044
+Run: 1/10, Epoch: 129/1500, this epoch time: 13.26s Train loss/score: 0.0394/0.0046
+Run: 1/10, Epoch: 130/1500, this epoch time: 13.28s Train loss/score: 0.0393/0.0045
+Run: 1/10, Epoch: 130/1500, Average Train epoch time: 14.08s, Average Eval epoch time: 15.73s
+Loss: 0.0393 Train/Val/Test loss: 0.0395/0.0401/0.0399
+Train/Val/Test: 0.0013/0.0000/0.0012
+Best val/Final test score/Best Step: 0.0018/0.0018/110
+Run: 1/10, Epoch: 131/1500, this epoch time: 13.27s Train loss/score: 0.0394/0.0039
+Run: 1/10, Epoch: 132/1500, this epoch time: 13.22s Train loss/score: 0.0392/0.0045
+Run: 1/10, Epoch: 133/1500, this epoch time: 14.15s Train loss/score: 0.0392/0.0051
+Run: 1/10, Epoch: 134/1500, this epoch time: 14.39s Train loss/score: 0.0392/0.0041
+Run: 1/10, Epoch: 135/1500, this epoch time: 14.24s Train loss/score: 0.0391/0.0042
+Run: 1/10, Epoch: 135/1500, Average Train epoch time: 14.07s, Average Eval epoch time: 15.75s
+Loss: 0.0391 Train/Val/Test loss: 0.0393/0.0399/0.0396
+Train/Val/Test: 0.0013/0.0000/0.0018
+Best val/Final test score/Best Step: 0.0018/0.0018/110
+Run: 1/10, Epoch: 136/1500, this epoch time: 13.72s Train loss/score: 0.0391/0.0036
+Run: 1/10, Epoch: 137/1500, this epoch time: 14.19s Train loss/score: 0.0390/0.0028
+Run: 1/10, Epoch: 138/1500, this epoch time: 14.08s Train loss/score: 0.0389/0.0029
+Run: 1/10, Epoch: 139/1500, this epoch time: 14.61s Train loss/score: 0.0390/0.0038
+Run: 1/10, Epoch: 140/1500, this epoch time: 13.86s Train loss/score: 0.0389/0.0034
+Run: 1/10, Epoch: 140/1500, Average Train epoch time: 14.07s, Average Eval epoch time: 15.74s
+Loss: 0.0389 Train/Val/Test loss: 0.0394/0.0401/0.0397
+Train/Val/Test: 0.0019/0.0000/0.0024
+Best val/Final test score/Best Step: 0.0018/0.0018/110
+Run: 1/10, Epoch: 141/1500, this epoch time: 13.09s Train loss/score: 0.0389/0.0033
+Run: 1/10, Epoch: 142/1500, this epoch time: 13.15s Train loss/score: 0.0388/0.0033
+Run: 1/10, Epoch: 143/1500, this epoch time: 13.28s Train loss/score: 0.0387/0.0039
+Run: 1/10, Epoch: 144/1500, this epoch time: 13.61s Train loss/score: 0.0386/0.0029
+Run: 1/10, Epoch: 145/1500, this epoch time: 13.46s Train loss/score: 0.0386/0.0051
+Run: 1/10, Epoch: 145/1500, Average Train epoch time: 14.05s, Average Eval epoch time: 15.72s
+Loss: 0.0386 Train/Val/Test loss: 0.0395/0.0402/0.0398
+Train/Val/Test: 0.0016/0.0000/0.0030
+Best val/Final test score/Best Step: 0.0018/0.0018/110
+Run: 1/10, Epoch: 146/1500, this epoch time: 13.19s Train loss/score: 0.0386/0.0044
+Run: 1/10, Epoch: 147/1500, this epoch time: 13.83s Train loss/score: 0.0386/0.0052
+Run: 1/10, Epoch: 148/1500, this epoch time: 13.15s Train loss/score: 0.0386/0.0042
+Run: 1/10, Epoch: 149/1500, this epoch time: 13.21s Train loss/score: 0.0386/0.0049
+Run: 1/10, Epoch: 150/1500, this epoch time: 13.20s Train loss/score: 0.0385/0.0039
+Run: 1/10, Epoch: 150/1500, Average Train epoch time: 14.02s, Average Eval epoch time: 15.69s
+Loss: 0.0385 Train/Val/Test loss: 0.0393/0.0400/0.0397
+Train/Val/Test: 0.0019/0.0000/0.0030
+Best val/Final test score/Best Step: 0.0018/0.0018/110
+Run: 1/10, Epoch: 151/1500, this epoch time: 13.22s Train loss/score: 0.0384/0.0038
+Run: 1/10, Epoch: 152/1500, this epoch time: 13.22s Train loss/score: 0.0383/0.0046
+Run: 1/10, Epoch: 153/1500, this epoch time: 13.68s Train loss/score: 0.0383/0.0057
+Run: 1/10, Epoch: 154/1500, this epoch time: 13.29s Train loss/score: 0.0383/0.0048
+Run: 1/10, Epoch: 155/1500, this epoch time: 13.18s Train loss/score: 0.0383/0.0044
+Run: 1/10, Epoch: 155/1500, Average Train epoch time: 14.00s, Average Eval epoch time: 15.67s
+Loss: 0.0383 Train/Val/Test loss: 0.0395/0.0403/0.0400
+Train/Val/Test: 0.0017/0.0000/0.0018
+Best val/Final test score/Best Step: 0.0018/0.0018/110
+Run: 1/10, Epoch: 156/1500, this epoch time: 13.11s Train loss/score: 0.0382/0.0034
+Run: 1/10, Epoch: 157/1500, this epoch time: 13.16s Train loss/score: 0.0383/0.0044
+Run: 1/10, Epoch: 158/1500, this epoch time: 13.11s Train loss/score: 0.0382/0.0049
+Run: 1/10, Epoch: 159/1500, this epoch time: 13.16s Train loss/score: 0.0381/0.0039
+Run: 1/10, Epoch: 160/1500, this epoch time: 13.77s Train loss/score: 0.0381/0.0041
+Run: 1/10, Epoch: 160/1500, Average Train epoch time: 13.98s, Average Eval epoch time: 15.65s
+Loss: 0.0381 Train/Val/Test loss: 0.0389/0.0398/0.0394
+Train/Val/Test: 0.0020/0.0000/0.0018
+Best val/Final test score/Best Step: 0.0018/0.0018/110
+Run: 1/10, Epoch: 161/1500, this epoch time: 13.15s Train loss/score: 0.0380/0.0048
+Run: 1/10, Epoch: 162/1500, this epoch time: 13.19s Train loss/score: 0.0380/0.0044
+Run: 1/10, Epoch: 163/1500, this epoch time: 13.05s Train loss/score: 0.0380/0.0053
+Run: 1/10, Epoch: 164/1500, this epoch time: 13.32s Train loss/score: 0.0379/0.0048
+Run: 1/10, Epoch: 165/1500, this epoch time: 13.81s Train loss/score: 0.0379/0.0040
+Run: 1/10, Epoch: 165/1500, Average Train epoch time: 13.96s, Average Eval epoch time: 15.63s
+Loss: 0.0379 Train/Val/Test loss: 0.0394/0.0403/0.0399
+Train/Val/Test: 0.0013/0.0000/0.0024
+Best val/Final test score/Best Step: 0.0018/0.0018/110
+Run: 1/10, Epoch: 166/1500, this epoch time: 13.53s Train loss/score: 0.0379/0.0035
+Run: 1/10, Epoch: 167/1500, this epoch time: 13.85s Train loss/score: 0.0378/0.0042
+Run: 1/10, Epoch: 168/1500, this epoch time: 13.61s Train loss/score: 0.0377/0.0033
+Run: 1/10, Epoch: 169/1500, this epoch time: 13.61s Train loss/score: 0.0377/0.0054
+Run: 1/10, Epoch: 170/1500, this epoch time: 13.26s Train loss/score: 0.0377/0.0049
+Run: 1/10, Epoch: 170/1500, Average Train epoch time: 13.94s, Average Eval epoch time: 15.61s
+Loss: 0.0377 Train/Val/Test loss: 0.0395/0.0404/0.0400
+Train/Val/Test: 0.0016/0.0006/0.0024
+Best val/Final test score/Best Step: 0.0018/0.0018/110
+Run: 1/10, Epoch: 171/1500, this epoch time: 13.06s Train loss/score: 0.0377/0.0051
+Run: 1/10, Epoch: 172/1500, this epoch time: 12.93s Train loss/score: 0.0377/0.0039
+Run: 1/10, Epoch: 173/1500, this epoch time: 13.01s Train loss/score: 0.0376/0.0039
+Run: 1/10, Epoch: 174/1500, this epoch time: 13.08s Train loss/score: 0.0376/0.0036
+Run: 1/10, Epoch: 175/1500, this epoch time: 13.06s Train loss/score: 0.0376/0.0048
+Run: 1/10, Epoch: 175/1500, Average Train epoch time: 13.92s, Average Eval epoch time: 15.59s
+Loss: 0.0376 Train/Val/Test loss: 0.0401/0.0411/0.0406
+Train/Val/Test: 0.0022/0.0006/0.0036
+Best val/Final test score/Best Step: 0.0018/0.0018/110
+Run: 1/10, Epoch: 176/1500, this epoch time: 13.13s Train loss/score: 0.0376/0.0048
+Run: 1/10, Epoch: 177/1500, this epoch time: 13.27s Train loss/score: 0.0375/0.0040
+Run: 1/10, Epoch: 178/1500, this epoch time: 13.15s Train loss/score: 0.0374/0.0056
+Run: 1/10, Epoch: 179/1500, this epoch time: 13.23s Train loss/score: 0.0374/0.0056
+Run: 1/10, Epoch: 180/1500, this epoch time: 13.31s Train loss/score: 0.0374/0.0048
+Run: 1/10, Epoch: 180/1500, Average Train epoch time: 13.90s, Average Eval epoch time: 15.57s
+Loss: 0.0374 Train/Val/Test loss: 0.0391/0.0401/0.0397
+Train/Val/Test: 0.0020/0.0000/0.0030
+Best val/Final test score/Best Step: 0.0018/0.0018/110
+Run: 1/10, Epoch: 181/1500, this epoch time: 13.03s Train loss/score: 0.0374/0.0054
+Run: 1/10, Epoch: 182/1500, this epoch time: 13.12s Train loss/score: 0.0373/0.0048
+Run: 1/10, Epoch: 183/1500, this epoch time: 13.26s Train loss/score: 0.0373/0.0042
+Run: 1/10, Epoch: 184/1500, this epoch time: 14.96s Train loss/score: 0.0373/0.0062
+Run: 1/10, Epoch: 185/1500, this epoch time: 15.29s Train loss/score: 0.0373/0.0042
+Run: 1/10, Epoch: 185/1500, Average Train epoch time: 13.90s, Average Eval epoch time: 15.57s
+Loss: 0.0373 Train/Val/Test loss: 0.0390/0.0401/0.0397
+Train/Val/Test: 0.0019/0.0000/0.0030
+Best val/Final test score/Best Step: 0.0018/0.0018/110
+Run: 1/10, Epoch: 186/1500, this epoch time: 13.43s Train loss/score: 0.0372/0.0050
+Run: 1/10, Epoch: 187/1500, this epoch time: 13.79s Train loss/score: 0.0372/0.0056
+Run: 1/10, Epoch: 188/1500, this epoch time: 13.29s Train loss/score: 0.0371/0.0056
+Run: 1/10, Epoch: 189/1500, this epoch time: 14.02s Train loss/score: 0.0372/0.0052
+Run: 1/10, Epoch: 190/1500, this epoch time: 14.26s Train loss/score: 0.0371/0.0051
