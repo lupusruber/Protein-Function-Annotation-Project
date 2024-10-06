@@ -9,10 +9,14 @@ import torch_geometric.transforms as T
 from torch_geometric.loader import LinkNeighborLoader
 
 
-PROTEIN_DATASET_ROOT = "home/lupusruber/root/projects/ppi/PPI/protein_dataset"
+PROTEIN_DATASET_ROOT = "/home/lupusruber/root/projects/ppi/PPI/protein_dataset"
+DATA_PREPARATOR_PATH = '/home/lupusruber/root/projects/ppi/PPI/data_preparators'
+
+# home/lupusruber/root/projects/ppi/PPI/protein_dataset/ppi/human_ppi_700.txt
+# /home/lupusruber/root/projects/ppi/PPI/protein_dataset/ppi/human_ppi_700.txt
 
 
-def clear_filtered_edges() -> None:
+def clear_filtered_edges(t: int, ont: str) -> None:
     fp_positive = f"{PROTEIN_DATASET_ROOT}/benchmark/human_ppi_{t}/train_{ont}_filtered_positive_edges.txt"
     fp_negative = f"{PROTEIN_DATASET_ROOT}/benchmark/human_ppi_{t}/train_{ont}_filtered_negative_edges.txt"
 
@@ -22,7 +26,8 @@ def clear_filtered_edges() -> None:
         os.remove(fp_negative)
 
 
-def get_ppi_edges() -> pd.DataFrame:
+def get_ppi_edges(t: int) -> pd.DataFrame:
+    
     ppi_edges = pd.read_table(f"{PROTEIN_DATASET_ROOT}/ppi/human_ppi_{t}.txt")
     ppi_edges.columns = [
         "source",
@@ -40,8 +45,9 @@ def get_ppi_edges() -> pd.DataFrame:
 
 
 def get_annotation_edges(
-    ont: str, ppi_edges: pd.DataFrame
+    t: int, ont: str, ppi_edges: pd.DataFrame
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
+    
     if ont == "all":
         gt_edges_bp = pd.read_table(
             f"{PROTEIN_DATASET_ROOT}/goa/t0/human_ppi_{t}_BP_anno_filtered.txt"
@@ -97,6 +103,7 @@ def get_protein_embeddings(ppi_edges: pd.DataFrame) -> pd.DataFrame:
 def get_gene_onotology_term_embeddings(
     gt_edges: pd.DataFrame, gt_edges_t2: pd.DataFrame
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
+    
     t1_terms_list = set(list(gt_edges["target"].values))
     t2_terms_list = set(list(gt_edges_t2["target"].values))
     terms_df = pd.DataFrame(
@@ -276,16 +283,16 @@ def create_train_loader(
 
 
 def train_graph_data_preparation(
-    t: int, ont: str, batch_size: int
+    t: int, ont: str, batch_size: int, test_or_train: str = 'train'
 ) -> tuple[LinkNeighborLoader, HeteroData]:
 
-    clear_filtered_edges()
+    clear_filtered_edges(t=t, ont=ont)
 
     # Load PPI edges
-    ppi_edges = get_ppi_edges()
+    ppi_edges = get_ppi_edges(t=t)
 
     # Load annotation edges
-    gt_edges, gt_edges_t2 = get_annotation_edges(ont=ont, ppi_edges=ppi_edges)
+    gt_edges, gt_edges_t2 = get_annotation_edges(t=t, ont=ont, ppi_edges=ppi_edges)
 
     # Load protein embeddings
     protein_nodes_df = get_protein_embeddings(ppi_edges=ppi_edges)
@@ -316,6 +323,8 @@ def train_graph_data_preparation(
         gt_edges_removed=gt_edges_removed,
     )
 
+    print(graph_data)
+
     train_loader = create_train_loader(
         positive_edges_df=positive_edges_df,
         negative_edges_df=negative_edges_df,
@@ -326,4 +335,15 @@ def train_graph_data_preparation(
         graph_data=graph_data,
     )
 
+    
+    #torch.save(graph_data, f'{DATA_PREPARATOR_PATH}/graph_data.pt')
+    #torch.save(train_loader, f'{DATA_PREPARATOR_PATH}/train_loader.pt')
+
+
     return train_loader, graph_data
+
+
+if __name__ == '__main__':
+    # train_loader, graph_data, ppi_edges = train_graph_data_preparation(t=700, ont='all', batch_size=32)
+    ppi_edges = get_ppi_edges(t=700)
+    print(ppi_edges.head())

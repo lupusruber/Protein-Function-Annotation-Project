@@ -3,6 +3,6 @@
 protein_dataset
 path.env
 old_code/gat/__pycache__
-
 /.vscode
 /gat_and_graph_sage/__pycache__
+tests
