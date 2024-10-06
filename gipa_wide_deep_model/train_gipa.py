@@ -145,7 +145,7 @@ def main():
     argparser.add_argument("--cpu", action="store_true", help="CPU mode. This option overrides '--gpu'.")
     argparser.add_argument("--gpu", type=int, default=0, help="GPU device ID")
     argparser.add_argument("--seed", type=int, default=0, help="random seed")
-    argparser.add_argument("--n-runs", type=int, default=10, help="running times")
+    argparser.add_argument("--n-runs", type=int, default=1, help="running times")
     argparser.add_argument("--n-epochs", type=int, default=1500, help="number of epochs")
     argparser.add_argument("--eval-times", type=int, default=1)
     argparser.add_argument("--advanced-optimizer", action="store_true")
