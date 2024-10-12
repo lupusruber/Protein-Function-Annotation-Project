@@ -336,14 +336,14 @@ def train_graph_data_preparation(
     )
 
     
-    #torch.save(graph_data, f'{DATA_PREPARATOR_PATH}/graph_data.pt')
-    #torch.save(train_loader, f'{DATA_PREPARATOR_PATH}/train_loader.pt')
+    torch.save(graph_data, f'{DATA_PREPARATOR_PATH}/graph_data_{ont}_{t}.pt')
+    # torch.save(train_loader, f'{DATA_PREPARATOR_PATH}/train_loader.pt')
 
 
     return train_loader, graph_data
 
 
 if __name__ == '__main__':
-    # train_loader, graph_data, ppi_edges = train_graph_data_preparation(t=700, ont='all', batch_size=32)
-    ppi_edges = get_ppi_edges(t=700)
-    print(ppi_edges.head())
+    train_loader, graph_data = train_graph_data_preparation(t=900, ont='CC', batch_size=32)
+    # ppi_edges = get_ppi_edges(t=700)
+    # print(ppi_edges.head())

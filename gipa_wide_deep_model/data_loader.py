@@ -21,10 +21,17 @@ def change_pyg_hetero_data(path: str):
   proteins, go_terms = data['protein', 'annotated', 'go_term']['edge_index']
 
   counter = Counter(go_terms.numpy())
-  n_most_common = 100
+  n_most_common = None
+
+
 
   set_of_most_common = set(np.array(counter.most_common(n_most_common))[:, 0])
+  
+  if not n_most_common:
+    n_most_common = len(set_of_most_common)
+  
   mapper = dict(zip(set_of_most_common, range(n_most_common)))
+
 
   adj_matrix = torch.zeros((proteins.max().item()+1,n_most_common), dtype=torch.int64)
 

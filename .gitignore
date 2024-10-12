@@ -6,3 +6,4 @@ old_code/gat/__pycache__
 /.vscode
 /gat_and_graph_sage/__pycache__
 tests
+/data_preparators/graph_data_CC_900.pt
