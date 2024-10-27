@@ -5,12 +5,15 @@ import dgl
 import torch.nn.functional as F
 from model_gipa import GipaWide, GipaDeep, GipaWideDeep
 
+
 def random_subgraph(num_clusters, graph, shuffle=True, save_e=[]):
     if shuffle:
         cluster_id = np.random.randint(low=0, high=num_clusters, size=graph.num_nodes())
     else:
         if not save_e:
-            cluster_id = np.random.randint(low=0, high=num_clusters, size=graph.num_nodes())
+            cluster_id = np.random.randint(
+                low=0, high=num_clusters, size=graph.num_nodes()
+            )
             save_e.append(cluster_id)
         else:
             cluster_id = save_e[0]
@@ -22,11 +25,15 @@ def random_subgraph(num_clusters, graph, shuffle=True, save_e=[]):
         sub_g = graph.subgraph(batch_nodes)
         yield batch_nodes, sub_g
 
-def count_model_parameters(model:torch.nn.Module):
+
+def count_model_parameters(model: torch.nn.Module):
     for name, parameters in model.named_parameters():
-        print(name, ':', parameters.size())
-    n_parameters = sum([np.prod(p.size()) for p in model.parameters() if p.requires_grad])
+        print(name, ":", parameters.size())
+    n_parameters = sum(
+        [np.prod(p.size()) for p in model.parameters() if p.requires_grad]
+    )
     return n_parameters
+
 
 def seed(seed=0):
     random.seed(seed)
@@ -39,10 +46,12 @@ def seed(seed=0):
     torch.backends.cudnn.benchmark = False
     dgl.random.seed(seed)
 
+
 def print_msg_and_write(out_msg, log_f):
     print(out_msg)
     log_f.write(out_msg)
     log_f.flush()
+
 
 def get_model(args, n_node_feats, n_edge_feats, n_classes, n_node_sparse_feats):
     if args.model == "gipa_wide":
@@ -50,40 +59,40 @@ def get_model(args, n_node_feats, n_edge_feats, n_classes, n_node_sparse_feats):
             n_node_sparse_feats if args.use_sparse_fea else n_node_feats,
             n_edge_feats,
             n_classes,
-            n_layers = args.n_layers,
-            n_heads = args.n_heads,
-            n_hidden = args.n_hidden,
-            edge_emb = args.edge_emb_size,
-            activation = F.relu,
-            dropout = args.dropout,
-            input_drop = args.feature_drop,
-            edge_drop = args.edge_drop,
-            use_attn_dst = not args.no_attn_dst,
-            norm = args.norm,
-            batch_norm = not args.disable_fea_trans_norm,
-            edge_att_act = args.edge_att_act,
-            edge_agg_mode = args.edge_agg_mode,
-            use_node_sparse = args.use_sparse_fea,
-            first_hidden = args.first_hidden,
-            input_norm = args.input_norm,
-            first_layer_act = args.first_layer_act,
-            first_layer_drop = args.input_drop,
-            first_layer_norm = args.first_layer_norm,
-            last_layer_drop = args.last_layer_drop
+            n_layers=args.n_layers,
+            n_heads=args.n_heads,
+            n_hidden=args.n_hidden,
+            edge_emb=args.edge_emb_size,
+            activation=F.relu,
+            dropout=args.dropout,
+            input_drop=args.feature_drop,
+            edge_drop=args.edge_drop,
+            use_attn_dst=not args.no_attn_dst,
+            norm=args.norm,
+            batch_norm=not args.disable_fea_trans_norm,
+            edge_att_act=args.edge_att_act,
+            edge_agg_mode=args.edge_agg_mode,
+            use_node_sparse=args.use_sparse_fea,
+            first_hidden=args.first_hidden,
+            input_norm=args.input_norm,
+            first_layer_act=args.first_layer_act,
+            first_layer_drop=args.input_drop,
+            first_layer_norm=args.first_layer_norm,
+            last_layer_drop=args.last_layer_drop,
         )
     elif args.model == "gipa_deep":
         model = GipaDeep(
             n_node_feats,
             n_edge_feats,
             n_classes,
-            n_layers = args.n_layers,
-            n_hidden = args.n_hidden,
-            n_head = args.n_heads,
-            edge_emb = args.edge_emb_size,
-            activation = F.relu,
-            dropout = args.dropout,
-            input_drop = args.input_drop,
-            edge_drop = args.edge_drop,
+            n_layers=args.n_layers,
+            n_hidden=args.n_hidden,
+            n_head=args.n_heads,
+            edge_emb=args.edge_emb_size,
+            activation=F.relu,
+            dropout=args.dropout,
+            input_drop=args.input_drop,
+            edge_drop=args.edge_drop,
             use_attn_dst=True,
             norm="none",
             batch_norm=True,
@@ -92,7 +101,7 @@ def get_model(args, n_node_feats, n_edge_feats, n_classes, n_node_sparse_feats):
             first_hidden=150,
             use_att_edge=True,
             use_prop_edge=False,
-            edge_prop_size=20
+            edge_prop_size=20,
         )
     elif args.model == "gipa_wide_deep" or args.model == "gipa_deep_wide":
         model = GipaWideDeep(
@@ -110,7 +119,7 @@ def get_model(args, n_node_feats, n_edge_feats, n_classes, n_node_sparse_feats):
             dropout=args.dropout,
             deep_drop_out=args.deep_drop_out,
             input_drop=args.feature_drop,
-            deep_input_drop = args.deep_input_drop,
+            deep_input_drop=args.deep_input_drop,
             edge_drop=args.edge_drop,
             use_attn_dst=not args.no_attn_dst,
             norm=args.norm,
@@ -126,7 +135,7 @@ def get_model(args, n_node_feats, n_edge_feats, n_classes, n_node_sparse_feats):
             last_layer_drop=args.last_layer_drop,
             use_att_edge=True,
             use_prop_edge=False,
-            edge_prop_size=20
+            edge_prop_size=20,
         )
     else:
         model = None

@@ -1,4 +1,3 @@
-from typing import Any
 import pandas as pd
 import os
 import random
@@ -8,17 +7,18 @@ from torch_geometric.data import HeteroData
 import torch_geometric.transforms as T
 from torch_geometric.loader import LinkNeighborLoader
 
+import argparse
 
 PROTEIN_DATASET_ROOT = "/home/lupusruber/root/projects/ppi/PPI/protein_dataset"
-DATA_PREPARATOR_PATH = '/home/lupusruber/root/projects/ppi/PPI/data_preparators'
+PROCESSED_DATA_PATH = '/home/lupusruber/root/projects/ppi/PPI/data_preparators'
 
 # home/lupusruber/root/projects/ppi/PPI/protein_dataset/ppi/human_ppi_700.txt
 # /home/lupusruber/root/projects/ppi/PPI/protein_dataset/ppi/human_ppi_700.txt
 
 
-def clear_filtered_edges(t: int, ont: str) -> None:
-    fp_positive = f"{PROTEIN_DATASET_ROOT}/benchmark/human_ppi_{t}/train_{ont}_filtered_positive_edges.txt"
-    fp_negative = f"{PROTEIN_DATASET_ROOT}/benchmark/human_ppi_{t}/train_{ont}_filtered_negative_edges.txt"
+def clear_filtered_edges(t: int, ont: str, train_or_test: str = 'train') -> None:
+    fp_positive = f"{PROTEIN_DATASET_ROOT}/benchmark/human_ppi_{t}/{train_or_test}_{ont}_filtered_positive_edges.txt"
+    fp_negative = f"{PROTEIN_DATASET_ROOT}/benchmark/human_ppi_{t}/{train_or_test}_{ont}_filtered_negative_edges.txt"
 
     if os.path.exists(fp_positive):
         os.remove(fp_positive)
@@ -124,23 +124,24 @@ def get_positive_and_negative_edges(
     terms_df: pd.DataFrame,
     gt_edges: pd.DataFrame,
     gt_edges_t2: pd.DataFrame,
+    train_or_test: str = 'train'
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
 
     if ont == "all":
         train_proteins_bp = pd.read_table(
-            f"{PROTEIN_DATASET_ROOT}/benchmark/human_ppi_{t}/train_BP_filtered.txt"
+            f"{PROTEIN_DATASET_ROOT}/benchmark/human_ppi_{t}/{train_or_test}_BP_filtered.txt"
         )["protein_id"].values.tolist()
         train_proteins_mf = pd.read_table(
-            f"{PROTEIN_DATASET_ROOT}/benchmark/human_ppi_{t}/train_MF_filtered.txt"
+            f"{PROTEIN_DATASET_ROOT}/benchmark/human_ppi_{t}/{train_or_test}_MF_filtered.txt"
         )["protein_id"].values.tolist()
         train_proteins_cc = pd.read_table(
-            f"{PROTEIN_DATASET_ROOT}/benchmark/human_ppi_{t}/train_CC_filtered.txt"
+            f"{PROTEIN_DATASET_ROOT}/benchmark/human_ppi_{t}/{train_or_test}_CC_filtered.txt"
         )["protein_id"].values.tolist()
         train_proteins = train_proteins_bp + train_proteins_mf + train_proteins_cc
 
     else:
         train_proteins = pd.read_table(
-            f"{PROTEIN_DATASET_ROOT}/benchmark/human_ppi_{t}/train_{ont}_filtered.txt"
+            f"{PROTEIN_DATASET_ROOT}/benchmark/human_ppi_{t}/{train_or_test}_{ont}_filtered.txt"
         )["protein_id"].values.tolist()
 
     all_terms = list(terms_df["go_id"].values.tolist())
@@ -283,10 +284,10 @@ def create_train_loader(
 
 
 def train_graph_data_preparation(
-    t: int, ont: str, batch_size: int, test_or_train: str = 'train'
+    t: int, ont: str, batch_size: int, train_or_test: str = 'train'
 ) -> tuple[LinkNeighborLoader, HeteroData]:
 
-    clear_filtered_edges(t=t, ont=ont)
+    clear_filtered_edges(t=t, ont=ont, train_or_test=train_or_test)
 
     # Load PPI edges
     ppi_edges = get_ppi_edges(t=t)
@@ -304,7 +305,7 @@ def train_graph_data_preparation(
 
     # Create positive and negative edges
     positive_edges_df, negative_edges_df = get_positive_and_negative_edges(
-        t=t, ont=ont, terms_df=terms_df, gt_edges=gt_edges, gt_edges_t2=gt_edges_t2
+        t=t, ont=ont, terms_df=terms_df, gt_edges=gt_edges, gt_edges_t2=gt_edges_t2, train_or_test=train_or_test
     )
 
     # Remove edges
@@ -325,25 +326,66 @@ def train_graph_data_preparation(
 
     print(graph_data)
 
-    train_loader = create_train_loader(
-        positive_edges_df=positive_edges_df,
-        negative_edges_df=negative_edges_df,
-        protein_nodes_df=protein_nodes_df,
-        go_term_nodes_df=go_term_nodes_df,
-        edges_to_remove=edges_to_remove,
-        batch_size=batch_size,
-        graph_data=graph_data,
-    )
+    # train_loader = create_train_loader(
+    #     positive_edges_df=positive_edges_df,
+    #     negative_edges_df=negative_edges_df,
+    #     protein_nodes_df=protein_nodes_df,
+    #     go_term_nodes_df=go_term_nodes_df,
+    #     edges_to_remove=edges_to_remove,
+    #     batch_size=batch_size,
+    #     graph_data=graph_data,
+    # )
 
     
-    torch.save(graph_data, f'{DATA_PREPARATOR_PATH}/graph_data_{ont}_{t}.pt')
     # torch.save(train_loader, f'{DATA_PREPARATOR_PATH}/train_loader.pt')
 
 
-    return train_loader, graph_data
+    # return train_loader, graph_data
+    return None, graph_data
+
+
+def get_whole_dataset(t: int, ont: str) -> None:
+    _, train_graph_data = train_graph_data_preparation(t=t, ont=ont, batch_size=32, train_or_test='train')
+    _, test_graph_data = train_graph_data_preparation(t=t, ont=ont, batch_size=32, train_or_test='test')
+
+    # torch.save(train_graph_data, f'{DATA_PREPARATOR_PATH}/train_graph_data_{ont}_{t}.pt')
+    # torch.save(test_graph_data, f'{DATA_PREPARATOR_PATH}/test_graph_data_{ont}_{t}.pt')
+
+
+    whole_data = HeteroData()
+
+    whole_data['protein'] = train_graph_data['protein']
+    whole_data['protein']['num_nodes'] = whole_data['protein']['x'].shape[0]
+    whole_data['go_term'] = train_graph_data['go_term']
+    whole_data['protein', 'interacts', 'protein'] = train_graph_data['protein', 'interacts', 'protein']
+
+    train_annotations = train_graph_data['protein', 'annotated', 'go_term']
+    test_annotations = test_graph_data['protein', 'annotated', 'go_term']
+
+    whole_data['protein', 'annotated', 'go_term'] = train_annotations.concat(test_annotations)
+
+    print(whole_data)
+
+    torch.save(whole_data, f'{PROCESSED_DATA_PATH}/whole_graph_data_{ont}_{t}.pt')
+
+
+
+def generate_all_datasets():
+    ontologies = ['BP', 'CC', 'MF']
+    t_values = [700, 900]
+    for ont in ontologies:
+        for t in t_values:
+            get_whole_dataset(t=t, ont=ont)
 
 
 if __name__ == '__main__':
-    train_loader, graph_data = train_graph_data_preparation(t=900, ont='CC', batch_size=32)
-    # ppi_edges = get_ppi_edges(t=700)
-    # print(ppi_edges.head())
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument("--raw-data", type=str, help="full path of the protein dataset")
+    argparser.add_argument("--generated-dataset", type=str,  help="full path location of saved heterodata objects")
+    
+    args = argparser.parse_args()
+    
+    PROTEIN_DATASET_ROOT = args.raw_data
+    PROCESSED_DATA_PATH = args.generated_dataset
+    
+    generate_all_datasets()

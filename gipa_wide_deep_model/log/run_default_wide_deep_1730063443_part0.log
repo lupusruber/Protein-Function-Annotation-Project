@@ -1,0 +1,4 @@
+Number of node feature: 8
+Number of edge feature: 8
+Number of params: 116273106
+Run: 1/1, Epoch: 1/3, this epoch time: 149.01s Train loss/score: 0.7174/0.5012
