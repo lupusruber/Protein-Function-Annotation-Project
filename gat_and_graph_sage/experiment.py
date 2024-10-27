@@ -1,5 +1,5 @@
 from data_preparators.data_preparation_train import train_graph_data_preparation
-from data_preparators.data_preparation_test import test_graph_data_preparation
+from tests.data_preparation_test import test_graph_data_preparation
 from hetero_gat_model import Model
 from train import train
 from train_graph_sage import train_sage
