@@ -9,8 +9,8 @@ from torch_geometric.loader import LinkNeighborLoader
 
 import argparse
 
-PROTEIN_DATASET_ROOT = "/home/lupusruber/root/projects/ppi/PPI/protein_dataset"
-PROCESSED_DATA_PATH = '/home/lupusruber/root/projects/ppi/PPI/data_preparators'
+# PROTEIN_DATASET_ROOT = "/home/lupusruber/root/projects/ppi/PPI/protein_dataset"
+# PROCESSED_DATA_PATH = '/home/lupusruber/root/projects/ppi/PPI/data_preparators'
 
 # home/lupusruber/root/projects/ppi/PPI/protein_dataset/ppi/human_ppi_700.txt
 # /home/lupusruber/root/projects/ppi/PPI/protein_dataset/ppi/human_ppi_700.txt
