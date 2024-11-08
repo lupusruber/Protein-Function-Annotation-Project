@@ -1,8 +1,5 @@
 import torch
 import dgl.function as fn
-from ogb.nodeproppred import DglNodePropPredDataset, Evaluator
-import dgl
-from collections import defaultdict
 from torch.utils.data import random_split
 from torch_geometric.utils import to_dgl
 from collections import Counter
@@ -42,35 +39,50 @@ simple_inter = [
     interval_15,
 ]
 
-N_MOST_COMMON = 200
 
-
-def change_pyg_hetero_data(path: str):
+def change_pyg_hetero_data(path: str, n_most_common: int):
+    
     data = torch.load(path)
     proteins, go_terms = data["protein", "annotated", "go_term"]["edge_index"]
 
-    counter = Counter(go_terms.numpy())
-    n_most_common = N_MOST_COMMON
+    reduce_dataset = n_most_common != data['go_term']['x'].shape[0]
 
-    set_of_most_common = set(np.array(counter.most_common(n_most_common))[:, 0])
+    
+    if reduce_dataset:
+        counter = Counter(go_terms.numpy())
 
-    mapper = dict(zip(set_of_most_common, range(n_most_common)))
+        set_of_most_common = set(np.array(counter.most_common(n_most_common))[:, 0])
 
-    adj_matrix = torch.zeros(
-        (proteins.max().item() + 1, n_most_common), dtype=torch.int64
+        mapper = dict(zip(set_of_most_common, range(n_most_common)))
+
+    labels = torch.zeros(
+        (data['protein']['x'].shape[0], n_most_common), dtype=torch.int64
     )
 
     for x, y in data["protein", "annotated", "go_term"]["edge_index"].transpose(0, 1):
         y_value = y.item()
-        if y_value in set_of_most_common:
-            adj_matrix[x, mapper[y_value]] = 1
+        if reduce_dataset:
+            if y_value in set_of_most_common:
+                labels[x, mapper[y_value]] = 1
+        else:
+            labels[x, y] = 1
 
     del data["protein", "annotated", "go_term"]
     del data["go_term"]
 
-    data["protein"]["labels"] = adj_matrix
+    data["protein"]["labels"] = labels
 
-    return data, adj_matrix
+    # tr_sum = labels.sum(axis=0)
+    # mask = torch.ones(labels.shape[1], dtype=torch.bool)
+    # index = torch.where(tr_sum == 0)[0]
+    # mask[index] = False  
+
+    # # Apply the mask to keep only the desired columns
+    # labels = labels[:, mask]
+    # data["protein"]["labels"] = labels
+
+
+    return data, labels
 
 
 def train_val_test_split(n_nodes: int) -> tuple[torch.tensor]:
@@ -85,18 +97,18 @@ def train_val_test_split(n_nodes: int) -> tuple[torch.tensor]:
 def trans_edge_fea_to_sparse(raw_edge_fea, graph, interval: list, is_log=False):
     edge_fea_list = []
     for i in range(8):
-        print("Process edge feature == %d " % i)
+        #print("Process edge feature == %d " % i)
         res = torch.reshape((raw_edge_fea[:, i] == 0.001).float(), [-1, 1])
         edge_fea_list.append(res)
         for j in range(1, len(interval[i])):
             small, big = float(interval[i][j - 1]), float(interval[i][j])
-            print("process interval %0.3f < x <= %0.3f " % (small, big))
+            #print("process interval %0.3f < x <= %0.3f " % (small, big))
             cond = torch.logical_and(
                 (raw_edge_fea[:, i] > small), (raw_edge_fea[:, i] <= big)
             )
             edge_fea_list.append(torch.reshape(cond.float(), [-1, 1]))
     sparse = torch.concat(edge_fea_list, dim=-1)
-    print(sparse.size())
+    #print(sparse.size())
     graph.edata.update({"sparse": sparse})
     graph.update_all(
         fn.copy_e("sparse", "sparse_c"),
@@ -166,7 +178,32 @@ def add_changed_data(graph, labels, train_idx, test_idx, val_idx, evaluator):
 def load_data(dataset, root_path):
     # data = DglNodePropPredDataset(name=dataset, root=root_path)
     evaluator = None
-    pyg_data, labels = change_pyg_hetero_data(dataset)
+
+    ont = dataset.split("/")[-1].split("_")[-2]
+    t = dataset.split("/")[-1].split("_")[-1][:-3]
+    
+    ont_t = f'{ont} {t}'
+
+
+#     class_mapper = {
+#     "MF 700": 712,
+#     "MF 900": 659,
+#     "CC 700": 494,
+#     "CC 900": 480,
+#     "BP 700": 4203,
+#     "BP 900": 4047,
+# }
+#     if ont != 'BP':
+#         N_MOST_COMMON = class_mapper[ont_t]
+#     else:
+#         N_MOST_COMMON = 500
+
+    N_MOST_COMMON = 200
+
+    print(f'Loading {ont_t} dataset with {N_MOST_COMMON} go terms')
+
+
+    pyg_data, labels = change_pyg_hetero_data(dataset, n_most_common=N_MOST_COMMON)
     n_protein_nodes = pyg_data["protein"]["x"].shape[0]
     pyg_data = Data(
         edge_index=pyg_data["protein", "interacts", "protein"]["edge_index"],
@@ -233,7 +270,8 @@ def preprocess(
             graph.dstdata.update({"dst_norm": deg_isqrt})
             graph.apply_edges(fn.u_mul_v("src_norm", "dst_norm", "gcn_norm"))
 
+    graph.ndata['labels'] = labels
     graph.create_formats_()
     print(graph.ndata.keys())
-    print(graph.edata.keys())
+    #print(graph.edata.keys())
     return graph, labels

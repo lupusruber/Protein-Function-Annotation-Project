@@ -19,11 +19,9 @@ def main(
 ) -> None:
     model_name = "GraphSage"
     # model_name = "GAT"
-    train_loader, graph_data = train_graph_data_preparation(
-        t, ont, batch_size
-    )
+    train_loader, graph_data = train_graph_data_preparation(t, ont, batch_size)
     metadata = graph_data.metadata()
-    
+
     test_loader = test_graph_data_preparation(t, ont, batch_size)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

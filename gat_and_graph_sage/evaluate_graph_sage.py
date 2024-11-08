@@ -25,7 +25,7 @@ def test_model_sage(
                 sampled_data["protein", "annotated", "go_term"].edge_label
             )
     pred = torch.cat(preds, dim=0).cpu().numpy()
-    
+
     ground_truth = torch.cat(ground_truths, dim=0).cpu().numpy()
     auc = roc_auc_score(ground_truth, pred)
     precision = precision_score(ground_truths, pred.round(), zero_division=1)

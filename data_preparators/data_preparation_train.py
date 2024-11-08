@@ -16,7 +16,7 @@ import argparse
 # /home/lupusruber/root/projects/ppi/PPI/protein_dataset/ppi/human_ppi_700.txt
 
 
-def clear_filtered_edges(t: int, ont: str, train_or_test: str = 'train') -> None:
+def clear_filtered_edges(t: int, ont: str, train_or_test: str = "train") -> None:
     fp_positive = f"{PROTEIN_DATASET_ROOT}/benchmark/human_ppi_{t}/{train_or_test}_{ont}_filtered_positive_edges.txt"
     fp_negative = f"{PROTEIN_DATASET_ROOT}/benchmark/human_ppi_{t}/{train_or_test}_{ont}_filtered_negative_edges.txt"
 
@@ -27,7 +27,7 @@ def clear_filtered_edges(t: int, ont: str, train_or_test: str = 'train') -> None
 
 
 def get_ppi_edges(t: int) -> pd.DataFrame:
-    
+
     ppi_edges = pd.read_table(f"{PROTEIN_DATASET_ROOT}/ppi/human_ppi_{t}.txt")
     ppi_edges.columns = [
         "source",
@@ -47,7 +47,7 @@ def get_ppi_edges(t: int) -> pd.DataFrame:
 def get_annotation_edges(
     t: int, ont: str, ppi_edges: pd.DataFrame
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    
+
     if ont == "all":
         gt_edges_bp = pd.read_table(
             f"{PROTEIN_DATASET_ROOT}/goa/t0/human_ppi_{t}_BP_anno_filtered.txt"
@@ -103,7 +103,7 @@ def get_protein_embeddings(ppi_edges: pd.DataFrame) -> pd.DataFrame:
 def get_gene_onotology_term_embeddings(
     gt_edges: pd.DataFrame, gt_edges_t2: pd.DataFrame
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    
+
     t1_terms_list = set(list(gt_edges["target"].values))
     t2_terms_list = set(list(gt_edges_t2["target"].values))
     terms_df = pd.DataFrame(
@@ -124,7 +124,7 @@ def get_positive_and_negative_edges(
     terms_df: pd.DataFrame,
     gt_edges: pd.DataFrame,
     gt_edges_t2: pd.DataFrame,
-    train_or_test: str = 'train'
+    train_or_test: str = "train",
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
 
     if ont == "all":
@@ -284,7 +284,7 @@ def create_train_loader(
 
 
 def train_graph_data_preparation(
-    t: int, ont: str, batch_size: int, train_or_test: str = 'train'
+    t: int, ont: str, batch_size: int, train_or_test: str = "train"
 ) -> tuple[LinkNeighborLoader, HeteroData]:
 
     clear_filtered_edges(t=t, ont=ont, train_or_test=train_or_test)
@@ -305,7 +305,12 @@ def train_graph_data_preparation(
 
     # Create positive and negative edges
     positive_edges_df, negative_edges_df = get_positive_and_negative_edges(
-        t=t, ont=ont, terms_df=terms_df, gt_edges=gt_edges, gt_edges_t2=gt_edges_t2, train_or_test=train_or_test
+        t=t,
+        ont=ont,
+        terms_df=terms_df,
+        gt_edges=gt_edges,
+        gt_edges_t2=gt_edges_t2,
+        train_or_test=train_or_test,
     )
 
     # Remove edges
@@ -324,7 +329,7 @@ def train_graph_data_preparation(
         gt_edges_removed=gt_edges_removed,
     )
 
-    print(graph_data)
+    # print(graph_data)
 
     # train_loader = create_train_loader(
     #     positive_edges_df=positive_edges_df,
@@ -336,56 +341,67 @@ def train_graph_data_preparation(
     #     graph_data=graph_data,
     # )
 
-    
     # torch.save(train_loader, f'{DATA_PREPARATOR_PATH}/train_loader.pt')
-
 
     # return train_loader, graph_data
     return None, graph_data
 
 
 def get_whole_dataset(t: int, ont: str) -> None:
-    _, train_graph_data = train_graph_data_preparation(t=t, ont=ont, batch_size=32, train_or_test='train')
-    _, test_graph_data = train_graph_data_preparation(t=t, ont=ont, batch_size=32, train_or_test='test')
+    _, train_graph_data = train_graph_data_preparation(
+        t=t, ont=ont, batch_size=32, train_or_test="train"
+    )
+    _, test_graph_data = train_graph_data_preparation(
+        t=t, ont=ont, batch_size=32, train_or_test="test"
+    )
 
     # torch.save(train_graph_data, f'{DATA_PREPARATOR_PATH}/train_graph_data_{ont}_{t}.pt')
     # torch.save(test_graph_data, f'{DATA_PREPARATOR_PATH}/test_graph_data_{ont}_{t}.pt')
 
-
     whole_data = HeteroData()
 
-    whole_data['protein'] = train_graph_data['protein']
-    whole_data['protein']['num_nodes'] = whole_data['protein']['x'].shape[0]
-    whole_data['go_term'] = train_graph_data['go_term']
-    whole_data['protein', 'interacts', 'protein'] = train_graph_data['protein', 'interacts', 'protein']
+    whole_data["protein"] = train_graph_data["protein"]
+    whole_data["protein"]["num_nodes"] = whole_data["protein"]["x"].shape[0]
+    whole_data["go_term"] = train_graph_data["go_term"]
+    whole_data["protein", "interacts", "protein"] = train_graph_data[
+        "protein", "interacts", "protein"
+    ]
 
-    train_annotations = train_graph_data['protein', 'annotated', 'go_term']
-    test_annotations = test_graph_data['protein', 'annotated', 'go_term']
+    train_annotations = train_graph_data["protein", "annotated", "go_term"]
+    test_annotations = test_graph_data["protein", "annotated", "go_term"]
 
-    whole_data['protein', 'annotated', 'go_term'] = train_annotations.concat(test_annotations)
+    whole_data["protein", "annotated", "go_term"] = train_annotations.concat(
+        test_annotations
+    )
 
+    print(f"Finished processing: Graph {ont} {t}")
     print(whole_data)
 
-    torch.save(whole_data, f'{PROCESSED_DATA_PATH}/whole_graph_data_{ont}_{t}.pt')
-
+    torch.save(whole_data, f"{PROCESSED_DATA_PATH}/whole_graph_data_{ont}_{t}.pt")
 
 
 def generate_all_datasets():
-    ontologies = ['BP', 'CC', 'MF']
+    ontologies = ["BP", "CC", "MF"]
     t_values = [700, 900]
     for ont in ontologies:
         for t in t_values:
             get_whole_dataset(t=t, ont=ont)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
-    argparser.add_argument("--raw-data", type=str, help="full path of the protein dataset")
-    argparser.add_argument("--generated-dataset", type=str,  help="full path location of saved heterodata objects")
-    
+    argparser.add_argument(
+        "--raw-data", type=str, help="full path of the protein dataset"
+    )
+    argparser.add_argument(
+        "--generated-dataset",
+        type=str,
+        help="full path location of saved heterodata objects",
+    )
+
     args = argparser.parse_args()
-    
+
     PROTEIN_DATASET_ROOT = args.raw_data
     PROCESSED_DATA_PATH = args.generated_dataset
-    
+
     generate_all_datasets()

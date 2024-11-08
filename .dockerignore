@@ -1,0 +1,12 @@
+gat_and_graph_sage
+.mypy_cache
+.vscode
+tests
+ppi.sif.gz
+README.md
+.env
+.gitignore
+Dockerfile
+.dockerignore
+gipa_wide_deep_model/__pycache__
+gipa_wide_deep_model/__pycache__/*.pyc

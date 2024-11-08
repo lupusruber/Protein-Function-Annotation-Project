@@ -1,6 +1,0 @@
-Namespace(model='gipa_deep_wide', root='.', cpu=False, gpu=0, seed=0, n_runs=1, n_epochs=1500, eval_times=1, advanced_optimizer=True, train_partition_num=1, eval_partition_num=1, no_attn_dst=False, n_heads=20, norm='none', disable_fea_trans_norm=False, edge_att_act='none', edge_agg_mode='single_softmax', lr=0.0005, n_layers=10, n_hidden=64, dropout=0.4, input_drop=0.4, edge_drop=0.1, eval_every=5, log_every=5, save_pred=False, log_file_name='run_default_wide_deep', first_hidden=512, edge_emb_size=8, wd=0, use_sparse_fea=True, sparse_encoder='log', input_norm=False, first_layer_norm=False, first_layer_act='relu', feature_drop=0.0, last_layer_drop=-1.0, n_deep_layers=3, n_deep_hidden=64, deep_drop_out=0.4, deep_input_drop=0.1, dataset='/home/lupusruber/root/projects/ppi/PPI/data_preparators/whole_graph_data_CC_700.pt')
-Running for seeds 0Number of node feature: 8
-Number of edge feature: 8
-Number of params: 48011160
-Run: 1/1, Epoch: 1/1500, this epoch time: 10.39s Train loss/score: 0.7560/0.4957
-Run: 1/1, Epoch: 2/1500, this epoch time: 10.51s Train loss/score: 0.6528/0.5005

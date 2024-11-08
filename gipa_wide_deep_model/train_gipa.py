@@ -3,7 +3,6 @@
 
 import argparse
 import os
-import sys
 import time
 import json
 
@@ -11,7 +10,6 @@ import optuna
 
 import numpy as np
 import torch
-import torch.nn.functional as func
 import torch.optim as optim
 from torch import nn
 from sklearn.metrics import roc_auc_score, classification_report
@@ -29,9 +27,9 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 device = None
 dataset = "ogbn-proteins"
 act_set = ["leaky_relu", "tanh", "softplus", "none", "relu"]
-n_node_feats, n_node_sparse_feats, n_edge_feats, n_classes = 0, 0, 8, 200
+n_node_feats, n_node_sparse_feats, n_edge_feats = 0, 0, 8
 
-
+patience = 30
 
 
 def get_final_preds_and_results(
@@ -62,18 +60,19 @@ def get_final_preds_and_results(
     test_preds = pred[test_idx].sigmoid().round()
     test_labels = labels[test_idx]
 
-    report = classification_report(y_true=test_labels.detach().cpu().numpy(), y_pred=test_labels.detach().cpu().numpy(), output_dict=True) | {'auc_score': test_score}
+    report = classification_report(
+        y_true=test_labels.detach().cpu().numpy(),
+        y_pred=test_labels.detach().cpu().numpy(),
+        output_dict=True,
+    ) | {"auc_score": test_score}
 
+    dataset_name = args.dataset.split("/")[-1].split(".")[0]
 
-    dataset_name = args.dataset.split('/')[-1].split('.')[0]    
-
-    with open(f'./results/{dataset_name}_results.json', 'w') as file:
+    with open(f"./results/{dataset_name}_results.json", "w") as file:
         file.write(json.dumps(report))
 
-    torch.save(test_preds.detach().cpu(), f'./results/{dataset_name}_preds.pt')
-    torch.save(test_labels.detach().cpu(), f'./results/{dataset_name}_labels.pt')
-
-
+    torch.save(test_preds.detach().cpu(), f"./results/{dataset_name}_preds.pt")
+    torch.save(test_labels.detach().cpu(), f"./results/{dataset_name}_labels.pt")
 
 
 def train(args, graph, model, _labels, _train_idx, criterion, optimizer, _evaluator):
@@ -142,7 +141,7 @@ def run(
     n_running,
     log_f,
     version,
-    save_labels
+    save_labels,
 ):
     # generate model
     criterion = nn.BCEWithLogitsLoss()
@@ -168,7 +167,7 @@ def run(
     optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.wd)
     if args.advanced_optimizer:
         lr_scheduler = optim.lr_scheduler.ReduceLROnPlateau(
-            optimizer, mode="max", factor=0.75, patience=50, verbose=True
+            optimizer, mode="max", factor=0.75, patience=50
         )
 
     (
@@ -180,8 +179,11 @@ def run(
         final_test_score,
         best_step,
     ) = (0, 0, 0, 0, 0, 0, 0)
-    final_pred = None
 
+    best_val_score = 0
+    best_test_score = 0
+    val_score = 0
+    epochs_no_improve = 0
     for epoch in range(1, args.n_epochs + 1):
         tic = time.time()
         loss, t_score = train(
@@ -196,10 +198,22 @@ def run(
         )
         total_time += time.time() - tic
         train_msg = (
-            f"Run: {n_running}/{args.n_runs}, Epoch: {epoch}/{args.n_epochs}, "
-            f"this epoch time: {time.time() - tic:.2f}s Train loss/score: {loss:.4f}/{t_score:.4f}\n"
+            f"Epoch: {epoch}/{args.n_epochs}, this epoch time: {time.time() - tic:.2f}s\n"
+            f"Train loss: {loss:.4f}\n"
+            f"AUC Train Score: {t_score:.4f}\n"
         )
         print_msg_and_write(train_msg, log_f)
+
+
+        if val_score > best_val_score:
+            best_val_score = val_score
+            epochs_no_improve = 0
+        else:
+            epochs_no_improve += 1
+
+        if epochs_no_improve == patience:
+            print(f"Early stopping at epoch {epoch} with best validation score: {best_val_score}")
+            break
 
         if (
             epoch == args.n_epochs
@@ -229,59 +243,43 @@ def run(
             eval_num += 1
             eval_time += time.time() - tic
 
-            if val_score > best_val_score:
-                best_val_score, final_test_score, final_pred, best_step = (
-                    val_score,
-                    test_score,
-                    pred,
-                    epoch,
-                )
-                if final_test_score > 0.8907 and args.save_pred:
-                    print_msg_and_write("Saving checkpoint at step %d" % epoch, log_f)
-                    torch.save(
-                        model.state_dict(),
-                        "%s/output/%s_part%d_epoch%d_auc%d_ckpt.pt"
-                        % (
-                            args.root,
-                            version,
-                            n_running,
-                            best_step,
-                            int(test_score * 1000),
-                        ),
-                    )
-
             out_msg = (
-                f"Run: {n_running}/{args.n_runs}, Epoch: {epoch}/{args.n_epochs}, "
+                f"Epoch: {epoch}/{args.n_epochs}, "
                 f"Average Train epoch time: {total_time / epoch:.2f}s, "
                 f"Average Eval epoch time: {eval_time / eval_num:.2f}s\n"
-                f"Loss: {loss:.4f} Train/Val/Test loss: {train_loss:.4f}/{val_loss:.4f}/{test_loss:.4f}\n"
-                f"Train/Val/Test: {train_score:.4f}/{val_score:.4f}/{test_score:.4f}\n"
-                f"Best val/Final test score/Best Step: {best_val_score:.4f}/{final_test_score:.4f}/{best_step}\n"
+                f"Loss: {loss:.4f} | Train loss: {train_loss:.4f} | Val loss {val_loss:.4f} | Test loss: {test_loss:.4f}\n"
+                f"-AUC- Train: {train_score:.4f} | Val: {val_score:.4f} | Test: {test_score:.4f}\n"
             )
             print_msg_and_write(out_msg, log_f)
+
+            best_test_score = max(best_test_score, test_score)
+
 
         if args.advanced_optimizer:
             lr_scheduler.step(val_score)
 
     out_msg = (
         "*" * 50
-        + f"\nBest val score: {best_val_score}, Final test score: {final_test_score}\n"
+        + f"\nBest val score: {best_val_score}, Final test score: {best_test_score}\n"
         + "*" * 50
         + "\n"
     )
     print_msg_and_write(out_msg, log_f)
 
     if save_labels:
-        get_final_preds_and_results(args, graph, model, labels, train_idx, val_idx, test_idx, criterion, evaluator_wrapper)
-
-    if args.save_pred:
-        print_msg_and_write("Saving output with sigmiod at step %d" % best_step, log_f)
-        torch.save(
-            func.sigmoid(final_pred),
-            "%s/output/%s_part%d_epoch%d_output.pt"
-            % (args.root, version, n_running, best_step),
+        get_final_preds_and_results(
+            args,
+            graph,
+            model,
+            labels,
+            train_idx,
+            val_idx,
+            test_idx,
+            criterion,
+            evaluator_wrapper,
         )
-    return best_val_score, final_test_score
+
+    return best_val_score, best_test_score
 
 
 def main():
@@ -419,6 +417,7 @@ def main():
     graph, labels, train_idx, val_idx, test_idx, evaluator = load_data(
         args.dataset, args.root
     )
+    n_classes = labels.shape[-1]
     print("Preprocessing......")
     graph, labels = preprocess(
         graph,
@@ -449,39 +448,44 @@ def main():
     os.makedirs("%s/log" % args.root, exist_ok=True)
     if args.save_pred:
         os.makedirs("%s/output" % args.root, exist_ok=True)
-    
+
     i = 0
     log_f = open("%s/log/%s_part%d.log" % (args.root, version, i), mode="a")
     seed(args.seed + i)
-    
+
     def objective(trial):
 
         to_change_dict = {
-        "lr" : trial.suggest_loguniform("lr", 1e-5, 1e-1),
-        "n_heads" : trial.suggest_int("n_heads", 4, 32),
-        "n_layers" : trial.suggest_int("n_layers", 4, 16),
-        "dropout" : trial.suggest_uniform("dropout", 0.0, 0.5),
-        "n_hidden" : trial.suggest_int("n_hidden", 32, 128),
-        "input_drop" : trial.suggest_uniform("input_drop", 0.0, 0.5),
-        "edge_drop" : trial.suggest_uniform("edge_drop", 0.0, 0.5),
-        "n_deep_layers" : trial.suggest_int("n_deep_layers", 2, 5),
-        "n_deep_hidden" : trial.suggest_int("n_deep_hidden", 32, 128),
-        "deep_drop_out" : trial.suggest_uniform("deep_drop_out", 0.0, 0.5),
-        "deep_input_drop" : trial.suggest_uniform("deep_input_drop", 0.0, 0.5),
+            
+            "lr": trial.suggest_float(name="lr", low=1e-3, high=1e-1, log=True),
+            "n_heads": trial.suggest_int("n_heads", 5, 20),
+            "n_layers": trial.suggest_int("n_layers", 4, 16),
+            "n_hidden": trial.suggest_int("n_hidden", 32, 100),
+            "n_deep_layers": trial.suggest_int("n_deep_layers", 2, 6),
+            "n_deep_hidden": trial.suggest_int("n_deep_hidden", 32, 100),
+            "n_epochs": trial.suggest_int("n_epochs", 200, 500),
+            
+            #"deep_input_drop": trial.suggest_float("deep_input_drop", 0.0, 0.5),
+            #"input_drop": trial.suggest_float("input_drop", 0.0, 0.5),
+            #"edge_drop": trial.suggest_float("edge_drop", 0.0, 0.5),
+            # "deep_drop_out": trial.suggest_float("deep_drop_out", 0.0, 0.5),
+            # "dropout": trial.suggest_float("dropout", 0.0, 0.5),
+
         }
 
         args.lr = to_change_dict["lr"]
         args.n_heads = to_change_dict["n_heads"]
         args.n_layers = to_change_dict["n_layers"]
-        args.dropout = to_change_dict["dropout"]
         args.n_hidden = to_change_dict["n_hidden"]
-        args.input_drop = to_change_dict["input_drop"]
-        args.edge_drop = to_change_dict["edge_drop"]
+        args.n_epochs = to_change_dict["n_epochs"]
         args.n_deep_layers = to_change_dict["n_deep_layers"]
         args.n_deep_hidden = to_change_dict["n_deep_hidden"]
-        args.deep_drop_out = to_change_dict["deep_drop_out"]
-        args.deep_input_drop = to_change_dict["deep_input_drop"]
-
+        
+        # args.deep_drop_out = to_change_dict["deep_drop_out"]
+        #args.deep_input_drop = to_change_dict["deep_input_drop"]
+        #args.input_drop = to_change_dict["input_drop"]
+        #args.edge_drop = to_change_dict["edge_drop"]
+        # args.dropout = to_change_dict["dropout"]
 
 
         val_score, _ = run(
@@ -495,43 +499,44 @@ def main():
             i + 1,
             log_f,
             version,
-            save_labels = False,
-
+            save_labels=False,
         )
+        
         return val_score
-    
-    
-    study = optuna.create_study(direction="maximize")
-    study.optimize(objective, n_trials=100)
+
+    study = optuna.create_study(study_name='gipa-tuning', direction="maximize")
+    study.optimize(objective, n_trials=20)
 
     to_change_dict = study.best_params
 
     args.lr = to_change_dict["lr"]
     args.n_heads = to_change_dict["n_heads"]
     args.n_layers = to_change_dict["n_layers"]
-    args.dropout = to_change_dict["dropout"]
     args.n_hidden = to_change_dict["n_hidden"]
-    args.input_drop = to_change_dict["input_drop"]
-    args.edge_drop = to_change_dict["edge_drop"]
     args.n_deep_layers = to_change_dict["n_deep_layers"]
     args.n_deep_hidden = to_change_dict["n_deep_hidden"]
-    args.deep_drop_out = to_change_dict["deep_drop_out"]
-    args.deep_input_drop = to_change_dict["deep_input_drop"]
-
+    args.n_epochs = to_change_dict["n_epochs"]
     
+    # args.deep_drop_out = to_change_dict["deep_drop_out"]
+    # args.deep_input_drop = to_change_dict["deep_input_drop"]
+    # args.dropout = to_change_dict["dropout"]
+    # args.input_drop = to_change_dict["input_drop"]
+    # args.edge_drop = to_change_dict["edge_drop"]
+
+
     val_score, test_score = run(
-            args,
-            graph,
-            labels,
-            train_idx,
-            val_idx,
-            test_idx,
-            evaluator,
-            i + 1,
-            log_f,
-            version,
-            save_labels = True,
-        )
+        args,
+        graph,
+        labels,
+        train_idx,
+        val_idx,
+        test_idx,
+        evaluator,
+        i + 1,
+        log_f,
+        version,
+        save_labels=True,
+    )
 
 
 if __name__ == "__main__":
