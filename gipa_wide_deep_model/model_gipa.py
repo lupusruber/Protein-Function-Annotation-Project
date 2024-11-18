@@ -68,7 +68,7 @@ class GIPAWideConv(nn.Module):
         # apply function
         self.dst_fc = nn.Linear(self._in_src_feats, out_feats * n_heads)
         self.activation = activation
-        #print("Init %s" % str(self.__class__))
+        # print("Init %s" % str(self.__class__))
         self.reset_parameters()
 
     def reset_parameters(self):
@@ -247,7 +247,7 @@ class GIPADeepConv(nn.Module):
         self.edge_att_actv = get_act_by_str(edge_att_act, negative_slope)
         self.activation = activation
 
-        #print("Init %s" % str(self.__class__))
+        # print("Init %s" % str(self.__class__))
         self.reset_parameters()
 
     def reset_parameters(self):
@@ -480,8 +480,8 @@ class GipaWide(nn.Module):
             last_layer_drop if last_layer_drop > 0 else dropout
         )
         self.activation = activation
-        #print("The parameter are %s,%s,%s" % (batch_norm, edge_att_act, edge_agg_mode))
-        #print("Init %s" % str(self.__class__))
+        # print("The parameter are %s,%s,%s" % (batch_norm, edge_att_act, edge_agg_mode))
+        # print("Init %s" % str(self.__class__))
 
     def forward(self, g):
         if not isinstance(g, list):
@@ -596,8 +596,8 @@ class GipaDeep(nn.Module):
         self.input_drop = nn.Dropout(input_drop)
         self.dropout = nn.Dropout(dropout)
         self.activation = activation
-        #print("The parameter are %s,%s,%s" % (batch_norm, edge_att_act, edge_agg_mode))
-        #print("Init %s" % str(self.__class__))
+        # print("The parameter are %s,%s,%s" % (batch_norm, edge_att_act, edge_agg_mode))
+        # print("Init %s" % str(self.__class__))
 
     def forward(self, g):
         if not isinstance(g, list):

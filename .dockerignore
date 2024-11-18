@@ -10,3 +10,4 @@ Dockerfile
 .dockerignore
 gipa_wide_deep_model/__pycache__
 gipa_wide_deep_model/__pycache__/*.pyc
+/data_preparators/*.pt

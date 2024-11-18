@@ -204,7 +204,6 @@ def run(
         )
         print_msg_and_write(train_msg, log_f)
 
-
         if val_score > best_val_score:
             best_val_score = val_score
             epochs_no_improve = 0
@@ -212,7 +211,9 @@ def run(
             epochs_no_improve += 1
 
         if epochs_no_improve == patience:
-            print(f"Early stopping at epoch {epoch} with best validation score: {best_val_score}")
+            print(
+                f"Early stopping at epoch {epoch} with best validation score: {best_val_score}"
+            )
             break
 
         if (
@@ -253,7 +254,6 @@ def run(
             print_msg_and_write(out_msg, log_f)
 
             best_test_score = max(best_test_score, test_score)
-
 
         if args.advanced_optimizer:
             lr_scheduler.step(val_score)
@@ -456,7 +456,6 @@ def main():
     def objective(trial):
 
         to_change_dict = {
-            
             "lr": trial.suggest_float(name="lr", low=1e-3, high=1e-1, log=True),
             "n_heads": trial.suggest_int("n_heads", 5, 20),
             "n_layers": trial.suggest_int("n_layers", 4, 16),
@@ -464,13 +463,11 @@ def main():
             "n_deep_layers": trial.suggest_int("n_deep_layers", 2, 6),
             "n_deep_hidden": trial.suggest_int("n_deep_hidden", 32, 100),
             "n_epochs": trial.suggest_int("n_epochs", 200, 500),
-            
-            #"deep_input_drop": trial.suggest_float("deep_input_drop", 0.0, 0.5),
-            #"input_drop": trial.suggest_float("input_drop", 0.0, 0.5),
-            #"edge_drop": trial.suggest_float("edge_drop", 0.0, 0.5),
+            # "deep_input_drop": trial.suggest_float("deep_input_drop", 0.0, 0.5),
+            # "input_drop": trial.suggest_float("input_drop", 0.0, 0.5),
+            # "edge_drop": trial.suggest_float("edge_drop", 0.0, 0.5),
             # "deep_drop_out": trial.suggest_float("deep_drop_out", 0.0, 0.5),
             # "dropout": trial.suggest_float("dropout", 0.0, 0.5),
-
         }
 
         args.lr = to_change_dict["lr"]
@@ -480,13 +477,12 @@ def main():
         args.n_epochs = to_change_dict["n_epochs"]
         args.n_deep_layers = to_change_dict["n_deep_layers"]
         args.n_deep_hidden = to_change_dict["n_deep_hidden"]
-        
-        # args.deep_drop_out = to_change_dict["deep_drop_out"]
-        #args.deep_input_drop = to_change_dict["deep_input_drop"]
-        #args.input_drop = to_change_dict["input_drop"]
-        #args.edge_drop = to_change_dict["edge_drop"]
-        # args.dropout = to_change_dict["dropout"]
 
+        # args.deep_drop_out = to_change_dict["deep_drop_out"]
+        # args.deep_input_drop = to_change_dict["deep_input_drop"]
+        # args.input_drop = to_change_dict["input_drop"]
+        # args.edge_drop = to_change_dict["edge_drop"]
+        # args.dropout = to_change_dict["dropout"]
 
         val_score, _ = run(
             args,
@@ -501,10 +497,10 @@ def main():
             version,
             save_labels=False,
         )
-        
+
         return val_score
 
-    study = optuna.create_study(study_name='gipa-tuning', direction="maximize")
+    study = optuna.create_study(study_name="gipa-tuning", direction="maximize")
     study.optimize(objective, n_trials=20)
 
     to_change_dict = study.best_params
@@ -516,13 +512,12 @@ def main():
     args.n_deep_layers = to_change_dict["n_deep_layers"]
     args.n_deep_hidden = to_change_dict["n_deep_hidden"]
     args.n_epochs = to_change_dict["n_epochs"]
-    
+
     # args.deep_drop_out = to_change_dict["deep_drop_out"]
     # args.deep_input_drop = to_change_dict["deep_input_drop"]
     # args.dropout = to_change_dict["dropout"]
     # args.input_drop = to_change_dict["input_drop"]
     # args.edge_drop = to_change_dict["edge_drop"]
-
 
     val_score, test_score = run(
         args,

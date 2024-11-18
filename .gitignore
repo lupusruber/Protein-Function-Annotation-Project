@@ -10,3 +10,4 @@ tests
 gipa_wide_deep_model/__pycache__
 
 ppi.sif.gz
+gipa_wide_deep_model/log

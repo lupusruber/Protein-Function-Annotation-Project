@@ -28,7 +28,7 @@ def random_subgraph(num_clusters, graph, shuffle=True, save_e=[]):
 
 def count_model_parameters(model: torch.nn.Module):
     for name, parameters in model.named_parameters():
-        #print(name, ":", parameters.size())
+        # print(name, ":", parameters.size())
         ...
     n_parameters = sum(
         [np.prod(p.size()) for p in model.parameters() if p.requires_grad]
