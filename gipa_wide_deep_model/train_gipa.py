@@ -458,11 +458,11 @@ def main():
         to_change_dict = {
             "lr": trial.suggest_float(name="lr", low=1e-3, high=1e-1, log=True),
             "n_heads": trial.suggest_int("n_heads", 5, 20),
-            "n_layers": trial.suggest_int("n_layers", 4, 16),
             "n_hidden": trial.suggest_int("n_hidden", 32, 100),
             "n_deep_layers": trial.suggest_int("n_deep_layers", 2, 6),
             "n_deep_hidden": trial.suggest_int("n_deep_hidden", 32, 100),
             "n_epochs": trial.suggest_int("n_epochs", 200, 500),
+            # "n_layers": trial.suggest_int("n_layers", 4, 16),
             # "deep_input_drop": trial.suggest_float("deep_input_drop", 0.0, 0.5),
             # "input_drop": trial.suggest_float("input_drop", 0.0, 0.5),
             # "edge_drop": trial.suggest_float("edge_drop", 0.0, 0.5),
@@ -472,12 +472,12 @@ def main():
 
         args.lr = to_change_dict["lr"]
         args.n_heads = to_change_dict["n_heads"]
-        args.n_layers = to_change_dict["n_layers"]
         args.n_hidden = to_change_dict["n_hidden"]
         args.n_epochs = to_change_dict["n_epochs"]
         args.n_deep_layers = to_change_dict["n_deep_layers"]
         args.n_deep_hidden = to_change_dict["n_deep_hidden"]
 
+        # args.n_layers = to_change_dict["n_layers"]
         # args.deep_drop_out = to_change_dict["deep_drop_out"]
         # args.deep_input_drop = to_change_dict["deep_input_drop"]
         # args.input_drop = to_change_dict["input_drop"]
@@ -507,12 +507,12 @@ def main():
 
     args.lr = to_change_dict["lr"]
     args.n_heads = to_change_dict["n_heads"]
-    args.n_layers = to_change_dict["n_layers"]
     args.n_hidden = to_change_dict["n_hidden"]
     args.n_deep_layers = to_change_dict["n_deep_layers"]
     args.n_deep_hidden = to_change_dict["n_deep_hidden"]
     args.n_epochs = to_change_dict["n_epochs"]
 
+    # args.n_layers = to_change_dict["n_layers"]
     # args.deep_drop_out = to_change_dict["deep_drop_out"]
     # args.deep_input_drop = to_change_dict["deep_input_drop"]
     # args.dropout = to_change_dict["dropout"]
