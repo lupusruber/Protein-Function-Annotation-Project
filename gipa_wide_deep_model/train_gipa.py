@@ -62,7 +62,7 @@ def get_final_preds_and_results(
 
     report = classification_report(
         y_true=test_labels.detach().cpu().numpy(),
-        y_pred=test_labels.detach().cpu().numpy(),
+        y_pred=test_preds.detach().cpu().numpy(),
         output_dict=True,
     ) | {"auc_score": test_score}
 
