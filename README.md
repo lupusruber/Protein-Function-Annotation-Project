@@ -25,21 +25,25 @@ The project is fully containerized with Docker, so no installation is required. 
 1. **Clone the repository:**
 
    Clone the project repository to your local machine:
-
+```bash
    git clone https://github.com/lupusruber/Protein-Function-Annotation-Project.git
    cd ppi
+```
 
 2. **Build the Docker container:**
 
    Use the provided Dockerfile to build the Docker container. Ensure Docker is installed and running on your machine.
-
+```bash
    docker build -t ppi_project .
+```
 
 3. **Run the Docker container:**
 
    Once the Docker container is built, you can run it using the following command:
 
+```bash
    docker run -it --gpus all ppi_project
+```
 
 4. **Execute scripts within the container:**
 
