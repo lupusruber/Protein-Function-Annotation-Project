@@ -47,6 +47,10 @@ The project is fully containerized with Docker, so no installation is required. 
 
    You can now execute the Python scripts for data preparation, model training, or evaluation from within the Docker container. All dependencies and environment configurations are handled inside the container.
 
+```bash
+  source main_shell.sh <protein_dataset_path> <generated_datasets_path>
+```
+
 5. **Results storage:**
 
 The labels, predictions, and evaluation metrics are stored in the results/ directory. You can find the following files:
