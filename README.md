@@ -8,8 +8,6 @@ The project is fully containerized with Docker, so no installation is required. 
 
 ## Project Structure
 
-# Project Structure
-
   - **data_preparators/**: Contains data preparation scripts and preprocessed graph data.
   - **Dockerfile**: Docker configuration file for setting up the environment.
   - **gat_and_graph_sage/**: Includes scripts for training, evaluating, and experimenting with GraphSAGE and GAT models.
