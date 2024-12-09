@@ -18,7 +18,7 @@ The project is fully containerized with Docker, so no installation is required. 
   - **protein_dataset/**: Stores the dataset and related files for Protein-Protein Interaction (PPI).
   - **README.md**: Project README containing instructions and details.
   - **requirements.txt**: Lists Python dependencies required for the project.
-  - **tests/**: Includes test scripts to verify the functionality of the project.
+  - **tests/**: Includes random test scripts.
 
 ## How to Run
 
